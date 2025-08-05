@@ -316,6 +316,36 @@ class ProductService {
       throw error;
     }
   }
+
+  static async updateSpecifications(productId, specifications) {
+    try {
+      const product = await Product.findById(productId);
+
+      if (!product) {
+        throw new Error("Product not found");
+      }
+
+      product.specifications = specifications;
+      await product.save();
+      return product;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getSpecifications(productId) {
+    try {
+      const product = await Product.findById(productId);
+
+      if (!product) {
+        throw new Error("Product not found");
+      }
+
+      return product.specifications;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = ProductService;

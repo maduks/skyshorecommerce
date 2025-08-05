@@ -187,6 +187,42 @@ class ProductController {
       res.status(400).json({ message: error.message });
     }
   }
+
+  static async updateSpecifications(req, res) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const { specifications } = req.body;
+      const product = await ProductService.updateSpecifications(
+        req.params.id,
+        specifications
+      );
+
+      res.json({
+        message: "Specifications updated successfully",
+        product,
+      });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
+  static async getSpecifications(req, res) {
+    try {
+      const specifications = await ProductService.getSpecifications(
+        req.params.id
+      );
+      res.json({
+        message: "Specifications retrieved successfully",
+        specifications,
+      });
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
+  }
 }
 
 module.exports = ProductController;

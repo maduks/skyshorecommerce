@@ -62,6 +62,7 @@ npm run dev
 
 ### Authentication
 - `POST /api/auth/register` - Register a new user (requires address, phone, state)
+- `POST /api/auth/register/admin` - Register a new admin user (Admin only)
 - `POST /api/auth/login` - User login
 - `GET /api/auth/profile` - Get user profile
 - `PUT /api/auth/profile` - Update user profile
@@ -73,12 +74,14 @@ npm run dev
 - `GET /api/products/sale` - Get products on sale
 - `GET /api/products/tag/:tag` - Get products by specific tag
 - `GET /api/products/:id` - Get product by ID
+- `GET /api/products/:id/specifications` - Get product specifications
 - `POST /api/products` - Create product (Admin only)
 - `PUT /api/products/:id` - Update product (Admin only)
 - `DELETE /api/products/:id` - Delete product (Admin only)
 - `POST /api/products/:id/rating` - Add product rating
 - `POST /api/products/:id/tags` - Add tags to product (Admin only)
 - `DELETE /api/products/:id/tags` - Remove tags from product (Admin only)
+- `PUT /api/products/:id/specifications` - Update product specifications (Admin only)
 
 ### Orders
 - `POST /api/orders` - Create order
@@ -122,6 +125,26 @@ curl -X POST http://localhost:6000/api/auth/register \
   }'
 ```
 
+### Register Admin User (Admin only)
+```bash
+curl -X POST http://localhost:6000/api/auth/register/admin \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "name": "Admin User",
+    "email": "admin@example.com",
+    "password": "adminpassword",
+    "phone": "+1-555-987-6543",
+    "address": {
+      "street": "456 Oak Avenue",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zipCode": "90210",
+      "country": "USA"
+    }
+  }'
+```
+
 ### Login
 ```bash
 curl -X POST http://localhost:6000/api/auth/login \
@@ -129,6 +152,59 @@ curl -X POST http://localhost:6000/api/auth/login \
   -d '{
     "email": "john@example.com",
     "password": "password123"
+  }'
+```
+
+### Update Profile
+```bash
+curl -X PUT http://localhost:6000/api/auth/profile \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "name": "John Smith",
+    "phone": "+1-555-987-6543",
+    "address": {
+      "street": "456 Oak Avenue",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zipCode": "90210",
+      "country": "USA"
+    }
+  }'
+```
+
+### Create Category (Admin)
+```bash
+curl -X POST http://localhost:6000/api/categories \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "name": "Electronics",
+    "description": "Electronic devices and accessories",
+    "parent": null
+  }'
+```
+
+### Create Subcategory (Admin)
+```bash
+curl -X POST http://localhost:6000/api/categories \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "name": "Smartphones",
+    "description": "Mobile phones and smartphones",
+    "parent": "PARENT_CATEGORY_ID"
+  }'
+```
+
+### Update Category (Admin)
+```bash
+curl -X PUT http://localhost:6000/api/categories/CATEGORY_ID \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "name": "Electronics & Gadgets",
+    "description": "Electronic devices, gadgets and accessories"
   }'
 ```
 
@@ -149,6 +225,7 @@ curl -X POST http://localhost:6000/api/products \
     "tags": ["featured", "new-arrival", "trending"],
     "featured": true,
     "newArrival": true,
+    "specifications": "<h3>Product Specifications</h3><ul><li><strong>Material:</strong> 100% Cotton</li><li><strong>Weight:</strong> 180 GSM</li><li><strong>Fit:</strong> Regular Fit</li><li><strong>Care Instructions:</strong> Machine wash cold, tumble dry low</li><li><strong>Origin:</strong> Made in USA</li><li><strong>Certification:</strong> OEKO-TEX Standard 100</li></ul>",
     "variations": [
       {
         "name": "Size",
@@ -193,6 +270,48 @@ curl -X POST http://localhost:6000/api/products \
     ],
     "salePrice": 24.99,
     "saleEndDate": "2024-12-31T23:59:59.000Z"
+  }'
+```
+
+### Update Product Specifications (Admin)
+```bash
+curl -X PUT http://localhost:6000/api/products/PRODUCT_ID/specifications \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "specifications": "<h3>Updated Product Specifications</h3><table><tr><th>Property</th><th>Value</th></tr><tr><td>Material</td><td>100% Organic Cotton</td></tr><tr><td>Weight</td><td>200 GSM</td></tr><tr><td>Fit</td><td>Slim Fit</td></tr></table>"
+  }'
+```
+
+### Get Product Specifications
+```bash
+curl -X GET http://localhost:6000/api/products/PRODUCT_ID/specifications
+```
+
+### Update Product (Admin)
+```bash
+curl -X PUT http://localhost:6000/api/products/PRODUCT_ID \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "name": "Updated Premium T-Shirt",
+    "description": "Updated description for the premium t-shirt",
+    "price": 34.99,
+    "stock": 150,
+    "featured": false,
+    "salePrice": 29.99,
+    "saleEndDate": "2024-12-31T23:59:59.000Z"
+  }'
+```
+
+### Add Product Rating
+```bash
+curl -X POST http://localhost:6000/api/products/PRODUCT_ID/rating \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "rating": 5,
+    "review": "Excellent quality product! Highly recommended."
   }'
 ```
 
@@ -259,6 +378,55 @@ curl -X POST http://localhost:6000/api/orders \
   }'
 ```
 
+### Update Order Status (Admin)
+```bash
+curl -X PUT http://localhost:6000/api/orders/ORDER_ID/status \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "status": "shipped"
+  }'
+```
+
+### Update Payment Status (Admin)
+```bash
+curl -X PUT http://localhost:6000/api/orders/ORDER_ID/payment \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "paymentResult": {
+      "id": "PAYMENT_ID_123",
+      "status": "completed",
+      "update_time": "2024-01-15T10:30:00Z",
+      "email_address": "customer@example.com"
+    }
+  }'
+```
+
+### Get All Users (Admin)
+```bash
+curl -X GET http://localhost:6000/api/users?page=1&limit=10&search=john \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+### Update User (Admin)
+```bash
+curl -X PUT http://localhost:6000/api/users/USER_ID \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "name": "John Updated",
+    "role": "admin",
+    "isActive": true
+  }'
+```
+
+### Deactivate User (Admin)
+```bash
+curl -X DELETE http://localhost:6000/api/users/USER_ID \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
 ## Product Tags
 
 The following tags are supported for products:
@@ -271,6 +439,16 @@ The following tags are supported for products:
 - **limited-edition**: Special limited products
 - **eco-friendly**: Environmentally friendly products
 - **premium**: High-end products
+
+## Product Specifications
+
+Products can have detailed specifications stored as HTML content:
+
+- **HTML Content**: Specifications can include formatted text, tables, lists, and styling
+- **WYSIWYG Support**: Compatible with rich text editors like TinyMCE, CKEditor, etc.
+- **Admin Management**: Update specifications via API
+- **Public Access**: Specifications are publicly readable
+- **Flexible Format**: Can include tables, lists, images, and any HTML formatting
 
 ## Product Variations
 
@@ -291,6 +469,13 @@ Products can have multiple variations (e.g., size, color) with individual:
 - `?onSale=true` - Products on sale only
 - `?sortBy=price&sortOrder=asc` - Sort products
 - `?page=1&limit=10` - Pagination
+
+### Order Status Values
+- `pending` - Order is pending
+- `processing` - Order is being processed
+- `shipped` - Order has been shipped
+- `delivered` - Order has been delivered
+- `cancelled` - Order has been cancelled
 
 ## Environment Variables
 
@@ -320,7 +505,7 @@ Products can have multiple variations (e.g., size, color) with individual:
 - name, email, password, phone, address (street, city, state, zipCode, country), role, isActive
 
 ### Product (Updated)
-- name, description, price, category, images, stock, sku, brand, tags, variations, featured, newArrival, salePrice, saleEndDate, ratings
+- name, description, price, category, images, stock, sku, brand, specifications, tags, variations, featured, newArrival, salePrice, saleEndDate, ratings
 
 ### Order
 - user, orderItems, shippingAddress, paymentMethod, totalPrice, status
@@ -353,4 +538,4 @@ When registering a new user, the following fields are **required**:
 
 ## License
 
-ISC License 
+ISC License

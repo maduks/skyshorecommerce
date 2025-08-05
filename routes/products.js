@@ -54,6 +54,10 @@ const productValidation = [
     .optional()
     .isISO8601()
     .withMessage("Sale end date must be a valid date"),
+  body("specifications")
+    .optional()
+    .isString()
+    .withMessage("Specifications must be a string"),
 ];
 
 const ratingValidation = [
@@ -83,6 +87,12 @@ const tagValidation = [
     .withMessage("Invalid tag value"),
 ];
 
+const specificationsValidation = [
+  body("specifications")
+    .isString()
+    .withMessage("Specifications must be a string"),
+];
+
 // Public routes
 router.get("/", ProductController.getAllProducts);
 router.get("/featured", ProductController.getFeaturedProducts);
@@ -90,6 +100,7 @@ router.get("/new-arrivals", ProductController.getNewArrivals);
 router.get("/sale", ProductController.getSaleProducts);
 router.get("/tag/:tag", ProductController.getProductsByTag);
 router.get("/:id", ProductController.getProductById);
+router.get("/:id/specifications", ProductController.getSpecifications);
 router.post("/:id/rating", auth, ratingValidation, ProductController.addRating);
 
 // Admin routes
@@ -115,6 +126,13 @@ router.delete(
   admin,
   tagValidation,
   ProductController.removeTags
+);
+router.put(
+  "/:id/specifications",
+  auth,
+  admin,
+  specificationsValidation,
+  ProductController.updateSpecifications
 );
 
 module.exports = router;

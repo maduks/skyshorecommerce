@@ -27,6 +27,39 @@ class AuthController {
     }
   }
 
+  static async registerAdmin(req, res) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const {
+        name,
+        email,
+        password,
+        phone,
+        address,
+        role = "admin",
+      } = req.body;
+      const result = await AuthService.registerAdmin({
+        name,
+        email,
+        password,
+        phone,
+        address,
+        role,
+      });
+
+      res.status(201).json({
+        message: "Admin user registered successfully",
+        ...result,
+      });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
   static async login(req, res) {
     try {
       const errors = validationResult(req);

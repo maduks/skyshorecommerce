@@ -15,10 +15,6 @@ const categoryValidation = [
     .trim()
     .isLength({ min: 10 })
     .withMessage("Description must be at least 10 characters long"),
-  body("parent")
-    .optional()
-    .isMongoId()
-    .withMessage("Please provide a valid parent category ID"),
 ];
 
 // Public routes
