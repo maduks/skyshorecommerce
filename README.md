@@ -32,6 +32,41 @@ A complete ecommerce backend API built with Node.js, Express, and MongoDB follow
 - MongoDB (local or cloud instance)
 - npm or yarn
 
+## Vercel Deployment
+
+This backend is configured for deployment on Vercel. Follow these steps to deploy:
+
+### 1. Install Vercel CLI
+```bash
+npm i -g vercel
+```
+
+### 2. Login to Vercel
+```bash
+vercel login
+```
+
+### 3. Deploy
+```bash
+vercel
+```
+
+### 4. Environment Variables
+Set these environment variables in your Vercel dashboard:
+
+- `MONGODB_URI`: Your MongoDB connection string
+- `JWT_SECRET`: Your JWT secret key
+- `NODE_ENV`: Set to "production"
+
+### 5. Custom Domain (Optional)
+You can add a custom domain in the Vercel dashboard.
+
+### 6. Health Check
+After deployment, test the health endpoint:
+```
+https://your-app.vercel.app/api/health
+```
+
 ## Installation
 
 1. Clone the repository:

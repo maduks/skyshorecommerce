@@ -34,7 +34,13 @@ const auth = async (req, res, next) => {
 
 const admin = async (req, res, next) => {
   try {
-    await auth(req, res, () => {});
+    // Call auth middleware and wait for it to complete
+    await new Promise((resolve, reject) => {
+      auth(req, res, (err) => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
 
     if (req.user.role !== "admin") {
       return res.status(403).json({ message: "Access denied. Admin only." });
