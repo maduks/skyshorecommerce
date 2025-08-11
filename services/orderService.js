@@ -47,9 +47,9 @@ class OrderService {
       }
 
       // Calculate tax and shipping (simplified)
-      const taxPrice = itemsPrice * 0.1; // 10% tax
-      const shippingPrice = itemsPrice > 100 ? 0 : 10; // Free shipping over $100
-      const totalPrice = itemsPrice + taxPrice + shippingPrice;
+      const taxPrice = 0; // 10% tax
+      const shippingPrice = 0; // Free shipping over $100
+      const totalPrice = itemsPrice + shippingPrice;
 
       const order = new Order({
         user: userId,
