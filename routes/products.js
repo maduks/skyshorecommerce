@@ -34,6 +34,7 @@ const productValidation = [
     .isIn([
       "new-arrival",
       "featured",
+      "carton",
       "trending",
       "sale",
       "bestseller",
@@ -77,6 +78,7 @@ const tagValidation = [
     .isIn([
       "new-arrival",
       "featured",
+      "carton",
       "trending",
       "sale",
       "bestseller",

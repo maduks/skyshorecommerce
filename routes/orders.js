@@ -28,14 +28,6 @@ const orderValidation = [
     .trim()
     .notEmpty()
     .withMessage("State is required"),
-  body("shippingAddress.zipCode")
-    .trim()
-    .notEmpty()
-    .withMessage("Zip code is required"),
-  body("shippingAddress.country")
-    .trim()
-    .notEmpty()
-    .withMessage("Country is required"),
   body("paymentMethod")
     .trim()
     .notEmpty()

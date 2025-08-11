@@ -85,6 +85,7 @@ const productSchema = new mongoose.Schema(
         enum: [
           "new-arrival",
           "featured",
+          "carton",
           "trending",
           "sale",
           "bestseller",
